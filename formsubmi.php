@@ -11,8 +11,7 @@ if(isset($_POST['submit'])){
     if(empty($_POST['phone'])){
         $errors['phoneErr'] = "Your phone is required";
         }else{
-            $data['phone'] = $_POST['phone'];
-        }
+           }
         if(empty($_POST['email'])){
             $errors['emailErr'] = "Your email is required";
             }else{
@@ -24,12 +23,20 @@ if(isset($_POST['submit'])){
             $pass = md5('peace');
             $date = date("Y-m-d h:i:s a");
             if(count($errors) == 0){
+
+             //Conditional Selection
+               $sql = "SELECT email FROM user WHERE email ='$email'";
+               $select = mysqli_query($conn, $sql);
+                if(mysqli_num_rows($select) == 0){
                 $sql = "INSERT INTO user(name, email, password, phone, dateregistered) VALUES('$name', '$email', '$pass', '$phone', '$date')";
               if(mysqli_query($conn,  $sql)){
                 echo "Data submitted successfully";
               }else{
                 echo "Something went wrong". mysqli_error($conn);
               }
+            }else{
+                $errors['emailErr'] ="Your email is already exist";
+            }
             }
 }
 
@@ -51,7 +58,7 @@ if(isset($_POST['submit'])){
         </p>
         <p>
             email : <br/> <input type="text" name="email" value="<?php  ?>" >
-            <span style="color:red"> <?php   ?>  </span>
+            <span style="color:red"> <?php echo array_key_exists('emailErr', $errors) ? $errors['emailErr'] : '' ?>  </span>
         </p>
         <p>
             Phone : <br/> <input type="tel" name="phone" value="<?php  ?>" >
