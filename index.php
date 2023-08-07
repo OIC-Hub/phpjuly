@@ -1,7 +1,17 @@
 <?php 
+
+session_start();
+if($_SESSION['role'] != 'admin'){
+  header('location:login.php');
+}
 require_once 'database.php';
 $sql = "SELECT * FROM user";
 $select = mysqli_query($conn, $sql);
+
+if(isset($_POST['delete'])){
+  $delete_email=$_POST['email'];
+  $conn->query("DELETE FROM user WHERE email='$delete_email'");
+}
 ?>
 
 <!DOCTYPE html>
@@ -11,11 +21,11 @@ $select = mysqli_query($conn, $sql);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bootstrap Site</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
-  </head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
 <body>
+
 <h1>USers Page</h1>
-
-
  <!-- List group -->
  <table class="table">
   <thead>
@@ -24,6 +34,7 @@ $select = mysqli_query($conn, $sql);
       <th scope="col">Name</th>
       <th scope="col">Email</th>
       <th scope="col">Phone</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -36,6 +47,14 @@ while( $result = mysqli_fetch_array($select)){
       <td><?php echo $result['name']?></td>
       <td><?php echo $result['email']?></td>
       <td><?php echo $result['phone']?></td>
+       <td>
+         <a href="userupdate.php?id=<?php echo $result['id'] ?>" style="text-decoration: none; display:inline-block; padding:2%; color:white; background-color:orange; border-radius:5%;">Update</a> ||
+          <form action="index.php" method="post" style="display: inline-block;">
+          <input type="hidden" name="email" value="<?php echo $result['email']?>">
+          <input type="submit" value="Delete" name="delete">
+         </form>
+       </td>
+
     </tr>
     <?php 
 };
