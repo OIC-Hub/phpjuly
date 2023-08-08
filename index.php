@@ -1,17 +1,5 @@
 <?php 
-
-session_start();
-if($_SESSION['role'] != 'admin'){
-  header('location:login.php');
-}
-require_once 'database.php';
-$sql = "SELECT * FROM user";
-$select = mysqli_query($conn, $sql);
-
-if(isset($_POST['delete'])){
-  $delete_email=$_POST['email'];
-  $conn->query("DELETE FROM user WHERE email='$delete_email'");
-}
+require 'serverhome.php';
 ?>
 
 <!DOCTYPE html>
@@ -40,17 +28,18 @@ if(isset($_POST['delete'])){
   <tbody>
   <?php
   $sn=1;
-while( $result = mysqli_fetch_array($select)){
+foreach( $users as $user){
+  
 ?>
     <tr>
       <th scope="row"><?php echo $sn++ ?></th>
-      <td><?php echo $result['name']?></td>
-      <td><?php echo $result['email']?></td>
-      <td><?php echo $result['phone']?></td>
+      <td><?php echo $user['name'] ?></td>
+      <td><?php echo $user['email'] ?></td>
+      <td><?php echo $user['phone'] ?></td>
        <td>
-         <a href="userupdate.php?id=<?php echo $result['id'] ?>" style="text-decoration: none; display:inline-block; padding:2%; color:white; background-color:orange; border-radius:5%;">Update</a> ||
+         <a href="userupdate.php?id=<?php echo $user['id'] ?>" style="text-decoration: none; display:inline-block; padding:2%; color:white; background-color:orange; border-radius:5%;">Update</a> ||
           <form action="index.php" method="post" style="display: inline-block;">
-          <input type="hidden" name="email" value="<?php echo $result['email']?>">
+          <input type="hidden" name="email" value="<?php echo $user['email']?>">
           <input type="submit" value="Delete" name="delete">
          </form>
        </td>
