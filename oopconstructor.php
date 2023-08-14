@@ -13,7 +13,7 @@ class Car{
      $this->plate_number= $plate_number;   
     }} 
 $volvo = new Car('black', '234', 'agbado', '2023', 'Volvo');
-$corolla = new Car('Blue', 'JB 12 FeB', 'CE', '2014', 'Corolla')
+$corolla = new Car('Red', 'JB 12 FeB', 'CE', '2014', 'Corolla')
 
 
 
