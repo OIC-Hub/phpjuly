@@ -7,7 +7,7 @@ if(!isset($_SESSION['email'])){
 }
 
 $email =$_SESSION['email'];
-$sql = "SELECT name, phone, email from user WHERE email=?";
+$sql = "SELECT name, phone, email, path from user WHERE email=?";
 $stm = $conn->prepare($sql);
   $stm->bind_param('s', $email);
   $stm->execute();
@@ -25,6 +25,7 @@ $stm = $conn->prepare($sql);
 </head>
 <body>
     <p> <a href="logout.php"> Logout</a></p>
+    <p><img src="upload/profile/<?php echo $user['path'] ?>" width="200px" ></p>
     <p>name: <?php echo  $user['name']  ?></p>
     <p> Email:<?php echo  $user['email']  ?></p>
     <p>Phone: <?php echo  $user['phone']  ?></p>
